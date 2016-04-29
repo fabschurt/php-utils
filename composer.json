@@ -1,0 +1,35 @@
+{
+  "name": "fabschurt/php-utils",
+  "description": "A collection of common PHP utility classes.",
+  "type": "library",
+  "homepage": "https://github.com/fabschurt/php-utils",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Fabien Schurter",
+      "email": "fabien@fabschurt.com",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "dev@fabschurt.com",
+    "issues": "https://github.com/fabschurt/php-utils/issues",
+    "source": "https://github.com/fabschurt/php-utils/tree/master",
+    "docs": "https://github.com/fabschurt/php-utils/blob/master/README.md"
+  },
+  "require": {
+    "php": "~7.0",
+    "danielstjules/stringy": "~2.3"
+  },
+  "require-dev": {
+    "fabpot/php-cs-fixer": "~1.11",
+    "peridot-php/peridot": "~1.18",
+    "peridot-php/leo": "~1.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "FabSchurt\\PhpUtils\\": "src/"
+    }
+  },
+  "prefer-stable": true
+}
