@@ -19,7 +19,7 @@ use function Stringy\create as s;
  *
  * @author Fabien Schurter <fabien@fabschurt.com>
  */
-class NaturallySortableStringArray extends AbstractSortableStringArray
+final class NaturallySortableStringArray extends AbstractSortableStringArray
 {
     /**
      * {@inheritDoc}
