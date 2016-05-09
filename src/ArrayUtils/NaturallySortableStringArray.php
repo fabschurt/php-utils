@@ -9,24 +9,25 @@
  * file that was distributed with this source code.
  */
 
-namespace FabSchurt\PhpUtils\ArraySorter;
+namespace FabSchurt\PhpUtils\ArrayUtils;
 
 use function Stringy\create as s;
 
 /**
  * This implementation attempts to stick to what human beings would generally
- * expect when sorting a list of things.
+ * expect when sorting a list of strings.
  *
  * @author Fabien Schurter <fabien@fabschurt.com>
  */
-class NaturalStringArraySorter implements StringArraySorterInterface
+class NaturallySortableStringArray extends AbstractSortableStringArray
 {
     /**
      * {@inheritDoc}
      */
-    public function sortStringArrayByTermResemblance(array $array, string $term): array
+    public function sortByTermResemblance(string $term): array
     {
-        $term = (string) s($term)->toLowerCase();
+        $term  = (string) s($term)->toLowerCase();
+        $array = $this->asArray();
         usort($array, function (string $a, string $b) use ($term): int {
             $aScore = s($a)->toLowerCase()->longestCommonPrefix($term)->length();
             $bScore = s($b)->toLowerCase()->longestCommonPrefix($term)->length();

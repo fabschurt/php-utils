@@ -17,17 +17,14 @@ describe(ObjectCollection::class, function () {
         });
     });
 
-    describe('->getIterator()', function () {
-        it('should return an iterator that provides read access to the internal object array', function () {
-            $objectArray = [
-                new \stdClass(),
-                new \stdClass(),
-                new \stdClass(),
-            ];
-            $collection = new ObjectCollection('\stdClass', $objectArray);
-            $i          = 0;
-            foreach ($collection->getIterator() as $collectedObject) {
-                expect(spl_object_hash($objectArray[$i]))->to->equal(spl_object_hash($collectedObject));
+    describe('->asArray()', function () {
+        it('should return a copy of the internal array', function () {
+            $objectArray = get_example_array();
+            $subject     = new ObjectCollection('\stdClass', $objectArray);
+            $i           = 0;
+            expect(count($objectArray))->to->equal(count($subject->asArray()));
+            foreach ($subject->asArray() as $collectedObject) {
+                expect($objectArray[$i])->to->equal($collectedObject);
                 ++$i;
             }
         });

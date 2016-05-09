@@ -19,7 +19,7 @@ use FabSchurt\PhpUtils\Iterator\ReadOnlyArrayIterator;
  *
  * @author Fabien Schurter <fabien@fabschurt.com>
  */
-class ObjectCollection implements \IteratorAggregate
+class ObjectCollection
 {
     /**
      * @var object[] An array of same-type objects
@@ -52,19 +52,16 @@ class ObjectCollection implements \IteratorAggregate
                 );
             }
         }
-
         $this->data = $data;
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the internal array untouched.
+     *
+     * @return object[]
      */
-    public function getIterator(): \Traversable
+    public function asArray(): array
     {
-        if (!$this->memoizedIterator) {
-            $this->memoizedIterator = new ReadOnlyArrayIterator($this->data);
-        }
-
-        return $this->memoizedIterator;
+        return $this->data;
     }
 }
