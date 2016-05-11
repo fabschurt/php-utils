@@ -19,8 +19,28 @@ use function Stringy\create as s;
  *
  * @author Fabien Schurter <fabien@fabschurt.com>
  */
-final class NaturallySortableStringArray extends AbstractSortableStringArray
+final class NaturallySortableStringArray implements SortableStringArrayInterface
 {
+    /**
+     * @var string[] The wrapped array of strings
+     */
+    private $wrappedArray;
+
+    /**
+     * @param string[] $wrappedArray A wrapped array of strings
+     *
+     * @throws \InvalidArgumentException If `$wrappedArray` does not contain strings only
+     */
+    public function __construct(array $wrappedArray)
+    {
+        foreach ($wrappedArray as $element) {
+            if (!is_string($element)) {
+                throw new \InvalidArgumentException('The passed array must contain strings only.');
+            }
+        }
+        $this->wrappedArray = $wrappedArray;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -39,5 +59,13 @@ final class NaturallySortableStringArray extends AbstractSortableStringArray
         });
 
         return $array;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function asArray(): array
+    {
+        return $this->wrappedArray;
     }
 }
