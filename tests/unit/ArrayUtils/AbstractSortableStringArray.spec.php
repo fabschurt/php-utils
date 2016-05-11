@@ -14,12 +14,12 @@ use FabSchurt\PhpUtils\ArrayUtils\AbstractSortableStringArray;
 describe(AbstractSortableStringArray::class, function () {
     describe('->__construct()', function () {
         it('should choke if the passed array does not contain strings only', function () {
-            expect(function () {
-                $mixedArray = [
-                    'string',
-                    42,
-                    'other_string',
-                ];
+            $mixedArray = [
+                'string',
+                42,
+                'other_string',
+            ];
+            expect(function () use ($mixedArray) {
                 Phake::partialMock(AbstractSortableStringArray::class, $mixedArray);
             })->to->throw('\InvalidArgumentException');
         });
