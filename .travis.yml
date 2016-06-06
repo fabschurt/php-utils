@@ -1,0 +1,10 @@
+sudo: false
+
+language: php
+
+php:
+  - 7.0
+
+install: composer install --prefer-dist --no-interaction
+
+script: ./vendor/bin/peridot -b
