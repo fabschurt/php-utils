@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace FabSchurt\PhpUtils\ArrayUtils;
+namespace FabSchurt\Php\Utils\SortableArray;
 
 /**
  * Implementations of this interface are expected to behave like wrappers which
