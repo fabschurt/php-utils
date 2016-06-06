@@ -19,7 +19,8 @@
   },
   "require": {
     "php": "~7.0",
-    "danielstjules/stringy": "~2.3"
+    "danielstjules/stringy": "~2.3",
+    "symfony/filesystem": "~2.8"
   },
   "require-dev": {
     "fabpot/php-cs-fixer": "~1.11",
