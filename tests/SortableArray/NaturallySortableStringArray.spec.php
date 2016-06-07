@@ -13,10 +13,6 @@ use FabSchurt\Php\Utils\SortableArray\NaturallySortableStringArray;
 
 describe(NaturallySortableStringArray::class, function () {
     beforeEach(function () {
-        $this->subjectFactory = function (array $data = null): NaturallySortableStringArray {
-            return new NaturallySortableStringArray($data ?? $this->dataFactory());
-        };
-
         $this->dataFactory = function (): array {
             return [
                 'Thymus Serpillum Extrakt',
@@ -24,6 +20,10 @@ describe(NaturallySortableStringArray::class, function () {
                 'Thymus Vulgaris',
                 'Thymus Mastichina Herb Oil',
             ];
+        };
+
+        $this->subjectFactory = function (array $data = null): NaturallySortableStringArray {
+            return new NaturallySortableStringArray($data ?? $this->dataFactory());
         };
     });
 
