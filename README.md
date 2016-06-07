@@ -13,7 +13,7 @@ projects.
 
 ## Installation
 
-Just require `fabschurt/php-utils:@dev` with [Composer](https://getcomposer.org/)
+Just require `fabschurt/php-utils:dev-master` with [Composer](https://getcomposer.org/)
 and you're good to go.
 
 ## License
