@@ -22,7 +22,7 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @author Fabien Schurter <fabien@fabschurt.com>
  */
-class TempDir implements TempDirInterface
+final class TempDir implements TempDirInterface
 {
     /**
      * @var string The memoized absolute path to the temporary directory
