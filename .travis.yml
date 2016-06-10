@@ -5,6 +5,6 @@ language: php
 php:
   - 7.0
 
-install: composer install --prefer-dist --no-interaction
+install: composer install --prefer-dist --no-interaction --optimize-autoloader
 
-script: ./vendor/bin/peridot -b
+script: ./vendor/bin/robo test
