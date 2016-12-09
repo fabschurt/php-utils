@@ -44,11 +44,11 @@ final class NaturallySortableStringArray implements SortableStringArrayInterface
     /**
      * {@inheritDoc}
      */
-    public function sortByTermResemblance(string $term): array
+    public function sortByTermResemblance($term)
     {
         $term  = (string) s($term)->toLowerCase();
         $array = $this->asArray();
-        usort($array, function (string $a, string $b) use ($term): int {
+        usort($array, function ($a, $b) use ($term) {
             $aScore = s($a)->toLowerCase()->longestCommonPrefix($term)->length();
             $bScore = s($b)->toLowerCase()->longestCommonPrefix($term)->length();
             if ($aScore === $bScore) {
@@ -64,7 +64,7 @@ final class NaturallySortableStringArray implements SortableStringArrayInterface
     /**
      * {@inheritDoc}
      */
-    public function asArray(): array
+    public function asArray()
     {
         return $this->wrappedArray;
     }

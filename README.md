@@ -9,7 +9,7 @@ projects.
 
 ## Requirements
 
-* [PHP](https://secure.php.net/) ~7.0
+* [PHP](https://secure.php.net/) ~5.6
 
 ## Installation
 

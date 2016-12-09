@@ -26,7 +26,7 @@ class RoboFile extends Tasks
     /**
      * Runs tests
      */
-    public function test(string $testFile = '')
+    public function test($testFile = '')
     {
         $this->_exec("./vendor/bin/peridot --force-colors -b {$testFile}");
     }

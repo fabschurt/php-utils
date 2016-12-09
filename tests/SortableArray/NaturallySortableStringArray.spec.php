@@ -13,7 +13,7 @@ use FabSchurt\Php\Utils\SortableArray\NaturallySortableStringArray;
 
 describe(NaturallySortableStringArray::class, function () {
     beforeEach(function () {
-        $this->dataFactory = function (): array {
+        $this->dataFactory = function () {
             return [
                 'Thymus Serpillum Extrakt',
                 'Thymol',
@@ -22,8 +22,8 @@ describe(NaturallySortableStringArray::class, function () {
             ];
         };
 
-        $this->subjectFactory = function (array $data = null): NaturallySortableStringArray {
-            return new NaturallySortableStringArray($data ?? $this->dataFactory());
+        $this->subjectFactory = function (array $data = null) {
+            return new NaturallySortableStringArray($data ? $data : $this->dataFactory());
         };
     });
 

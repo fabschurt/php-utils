@@ -43,10 +43,10 @@ final class TempDir implements TempDirInterface
      * @param Filesystem $filesystem
      * @param string     $dirNamePrefix The prefix that will be applied to the temporary directory's name
      */
-    public function __construct(Filesystem $filesystem, string $dirNamePrefix = 'php-utils.')
+    public function __construct(Filesystem $filesystem, $dirNamePrefix = 'tempdir.')
     {
         $this->filesystem    = $filesystem;
-        $this->dirNamePrefix = $dirNamePrefix;
+        $this->dirNamePrefix = (string) $dirNamePrefix;
     }
 
     /**
@@ -56,7 +56,7 @@ final class TempDir implements TempDirInterface
      * exist, and store its path into the `$path` property, or just return the
      * path if it already exists.
      */
-    public function __toString(): string
+    public function __toString()
     {
         if (is_null($this->path)) {
             $path = sprintf('%s/%s', sys_get_temp_dir(), uniqid($this->dirNamePrefix));
@@ -72,7 +72,7 @@ final class TempDir implements TempDirInterface
      *
      * Leading slash(es) will be trimmed from `$path`.
      */
-    public function prefixPath(string $path): string
+    public function prefixPath($path)
     {
         $path = ltrim($path, '/');
 

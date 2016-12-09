@@ -27,12 +27,12 @@ interface SortableStringArrayInterface
      *
      * @return string[] The sorted string array
      */
-    public function sortByTermResemblance(string $term): array;
+    public function sortByTermResemblance($term);
 
     /**
      * Returns the wrapped array untouched.
      *
      * @return string[]
      */
-    public function asArray(): array;
+    public function asArray();
 }

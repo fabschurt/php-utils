@@ -16,12 +16,12 @@ describe(TempDir::class, function () {
     beforeEach(function () {
         $this->filesystem = new Filesystem();
 
-        $this->subjectFactory = function (string $prefix = ''): TempDir {
-            $args = array_merge(
-                [$this->filesystem],
-                $prefix ? [$prefix] : []
-            );
-            $subject           = new TempDir(...$args);
+        $this->subjectFactory = function ($prefix = null) {
+            $args = [$this->filesystem];
+            if ($prefix) {
+                $args[] = $prefix;
+            }
+            $subject = new TempDir(...$args);
             $this->currentPath = (string) $subject;
 
             return $subject;
@@ -40,7 +40,7 @@ describe(TempDir::class, function () {
         });
 
         it('can add a custom prefix to the directory name', function () {
-            $prefix = 'fortytwo-';
+            $prefix = 'fortytwo.';
             expect(basename((string) $this->subjectFactory($prefix)))->to->match("/^{$prefix}/");
         });
     });

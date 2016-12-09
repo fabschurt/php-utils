@@ -24,7 +24,7 @@ interface TempDirInterface
      *
      * @return string The absolute path to the concrete temporary directory
      */
-    public function __toString(): string;
+    public function __toString();
 
     /**
      * Returns `$path`, prefixed with the concrete temporary directory's
@@ -34,7 +34,7 @@ interface TempDirInterface
      *
      * @return string The prefixed absolute path
      */
-    public function prefixPath(string $path): string;
+    public function prefixPath($path);
 
     /**
      * Creates a filesystem subtree (relative to the current temporary path)
