@@ -37,6 +37,26 @@ interface TempDirInterface
     public function prefixPath(string $path): string;
 
     /**
+     * Creates a filesystem subtree (relative to the current temporary path)
+     * from a data array with predefined format.
+     *
+     * @param array $structure The expected filesystem subtree, example:
+     *
+     *                         [
+     *                             'app' => [], // Will create an empty `app` directory
+     *                             'var' => [
+     *                                 'data'  => [], // Will create an empty `var/data` directory
+     *                                 'cache' => [
+     *                                     'view_cache.php' => '42', // Will create a `var/cache/view_cache.php` file with `42` as content
+     *                                 ],
+     *                             ],
+     *                         ]
+     * @param string $baseDir (optional) The subdirectory path (relative to the current temporary path) which the
+     *                        expected subtree should be a child of
+     */
+    public function addStructure(array $structure, $baseDir = '');
+
+    /**
      * Removes the concrete temporary directory from storage if it exists.
      */
     public function cleanup();

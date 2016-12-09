@@ -82,6 +82,29 @@ final class TempDir implements TempDirInterface
     /**
      * {@inheritDoc}
      */
+    public function addStructure(array $structure, $baseDir = '')
+    {
+        $baseDir = trim((string) $baseDir, '/');
+        foreach ($structure as $nodeName => $nodeContent) {
+            switch (gettype($nodeContent)) {
+                case 'array':
+                    $path = "{$baseDir}/{$nodeName}";
+                    $this->filesystem->mkdir("{$this}/{$path}");
+                    $this->addStructure($nodeContent, $path);
+                    break;
+                case 'string':
+                    file_put_contents("{$this}/{$baseDir}/{$nodeName}", $nodeContent);
+                    break;
+                default:
+                    throw new \InvalidArgumentException('Node content must be an array or a string.');
+                    break;
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function cleanup()
     {
         if (!is_null($this->path) && $this->path !== '/') {

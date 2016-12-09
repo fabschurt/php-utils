@@ -57,6 +57,34 @@ describe(TempDir::class, function () {
         });
     });
 
+    describe('->addStructure()', function () {
+        it('should create a child filesystem tree from a data array with predefined format', function () {
+            $subject   = $this->subjectFactory();
+            $structure = [
+                'app' => [
+                    'controllers' => [
+                        'DefaultController.php' => 'This is not the controller you’re looking for.',
+                        'ArticleController.php' => 'I had a dream, that this controller existed.',
+                    ],
+                ],
+                'var' => [
+                    'cache' => [],
+                ],
+                '.env' => 'Save the environment!',
+            ];
+            $subject->addStructure($structure);
+            $baseDir = (string) $subject;
+            expect(is_dir("{$baseDir}/var/cache"))->to->be->true;
+            expect(
+                file_get_contents("{$baseDir}/app/controllers/DefaultController.php")
+            )->to->equal('This is not the controller you’re looking for.');
+            expect(
+                file_get_contents("{$baseDir}/app/controllers/ArticleController.php")
+            )->to->equal('I had a dream, that this controller existed.');
+            expect(file_get_contents("{$baseDir}/.env"))->to->equal('Save the environment!');
+        });
+    });
+
     describe('->cleanup()', function () {
         it('destroys the temporary directory on the filesystem', function () {
             $subject = $this->subjectFactory();
