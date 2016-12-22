@@ -15,7 +15,6 @@ use Symfony\Component\Filesystem\Filesystem;
 describe(TempDir::class, function () {
     beforeEach(function () {
         $this->filesystem = new Filesystem();
-
         $this->subjectFactory = function ($prefix = null) {
             $args = [$this->filesystem];
             if ($prefix) {
@@ -29,7 +28,7 @@ describe(TempDir::class, function () {
     });
 
     afterEach(function () {
-        if ($this->currentPath) {
+        if (!empty($this->currentPath) && $this->currentPath !== '/') {
             $this->filesystem->remove($this->currentPath);
         }
     });
@@ -41,7 +40,11 @@ describe(TempDir::class, function () {
 
         it('can add a custom prefix to the directory name', function () {
             $prefix = 'fortytwo.';
-            expect(basename((string) $this->subjectFactory($prefix)))->to->match("/^{$prefix}/");
+            expect(
+                basename((string) $this->subjectFactory($prefix))
+            )->to->match(
+                sprintf('/^%s/', preg_quote($prefix))
+            );
         });
     });
 
@@ -58,8 +61,8 @@ describe(TempDir::class, function () {
     });
 
     describe('->addStructure()', function () {
-        it('should create a child filesystem tree from a data array with predefined format', function () {
-            $subject   = $this->subjectFactory();
+        it('creates a child filesystem tree from a data array with predefined format', function () {
+            $subject = $this->subjectFactory();
             $structure = [
                 'app' => [
                     'controllers' => [

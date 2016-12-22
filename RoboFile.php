@@ -30,4 +30,28 @@ class RoboFile extends Tasks
     {
         $this->_exec("./vendor/bin/peridot --force-colors -b {$testFile}");
     }
+
+    /**
+     * Validates PHP syntax.
+     */
+    public function lint()
+    {
+        $this
+            ->taskExec('find {src,tests} -type f -name "*.php" -exec php -l {} \\;')
+            ->run()
+        ;
+    }
+
+    /**
+     * Checks coding standards using PHP CS Fixer.
+     *
+     * @option $fix Check CS, but also implement fixes (WARNING: source files will be modified)
+     */
+    public function cs(array $opts = ['fix' => false])
+    {
+        $this
+            ->taskExec(sprintf('./vendor/bin/php-cs-fixer fix -vvv %s', $opts['fix'] ? '' : '--dry-run'))
+            ->run()
+        ;
+    }
 }

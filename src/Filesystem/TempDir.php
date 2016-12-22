@@ -35,13 +35,13 @@ final class TempDir implements TempDirInterface
     private $filesystem;
 
     /**
-     * @var string The prefix that will be applied to the temporary directory's name
+     * @var string The prefix that will be applied to the temporary directory’s name
      */
     private $dirNamePrefix;
 
     /**
      * @param Filesystem $filesystem
-     * @param string     $dirNamePrefix The prefix that will be applied to the temporary directory's name
+     * @param string     $dirNamePrefix The prefix that will be applied to the temporary directory’s name
      */
     public function __construct(Filesystem $filesystem, $dirNamePrefix = 'tempdir.')
     {
@@ -52,8 +52,8 @@ final class TempDir implements TempDirInterface
     /**
      * {@inheritDoc}
      *
-     * It will lazy-create the concrete directory on the fly if it doesn't
-     * exist, and store its path into the `$path` property, or just return the
+     * It will lazy-create the concrete directory on the fly if it doesn’t
+     * exist and store its path into the `$path` property, or just return the
      * path if it already exists.
      */
     public function __toString()

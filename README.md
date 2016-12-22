@@ -4,8 +4,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cf262973bb4d4944bccee45942e656f3)](https://www.codacy.com/app/fabschurt/php-utils)
 [![Dependency Status](https://www.versioneye.com/user/projects/5759265a7757a00041b3b201/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5759265a7757a00041b3b201)
 
-This is a collection of highly focused utility classes to use in your PHP
-projects.
+This is a collection of highly focused utility classes to use in your PHP projects.
 
 ## Requirements
 
@@ -13,8 +12,8 @@ projects.
 
 ## Installation
 
-Just require `fabschurt/php-utils:dev-master` with [Composer](https://getcomposer.org/)
-and you're good to go.
+Just require `fabschurt/php-utils:^1.0@dev` with [Composer](https://getcomposer.org/)
+and you’re good to go.
 
 ## License
 

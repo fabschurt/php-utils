@@ -22,15 +22,15 @@ interface TempDirInterface
     /**
      * Returns the absolute path to the concrete temporary directory.
      *
-     * @return string The absolute path to the concrete temporary directory
+     * @return string
      */
     public function __toString();
 
     /**
-     * Returns `$path`, prefixed with the concrete temporary directory's
+     * Returns `$path`, prefixed with the concrete temporary directory’s
      * absolute path.
      *
-     * @param string $path The relative path to prefix
+     * @param string $path The relative path to be prefixed
      *
      * @return string The prefixed absolute path
      */
@@ -40,7 +40,7 @@ interface TempDirInterface
      * Creates a filesystem subtree (relative to the current temporary path)
      * from a data array with predefined format.
      *
-     * @param array $structure The expected filesystem subtree, example:
+     * @param array $structure The expected filesystem subtree, for example:
      *
      *                         [
      *                             'app' => [], // Will create an empty `app` directory

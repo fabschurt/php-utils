@@ -18,7 +18,12 @@ return Symfony\CS\Config\Config::create()
         '-psr0',
         '-unalign_double_arrow',
         '-unalign_equals',
+        'combine_consecutive_unsets',
+        'empty_return',
         'ereg_to_preg',
+        'newline_after_open_tag',
+        'no_useless_else',
+        'no_useless_return',
         'ordered_use',
         'php4_constructor',
         'phpdoc_order',
@@ -28,8 +33,7 @@ return Symfony\CS\Config\Config::create()
     ])
     ->finder(
         Symfony\CS\Finder\DefaultFinder::create()
-            ->in(__DIR__)
-            ->path('src/')
-            ->path('tests/')
+            ->in('src/')
+            ->in('tests/')
     )
 ;
