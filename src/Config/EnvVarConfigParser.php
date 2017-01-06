@@ -20,7 +20,7 @@ use function Stringy\create as s;
  * This parser will import config parameters from environment variables.
  *
  * Variables described in the `.env.example` file will be imported as environment
- * variables and then as application parameters, with values being taken from
+ * variables and then as config parameters, with values being taken from
  * preexisting environment variables first, and then optionally from a `.env`
  * file (without overwriting existing non-null values), or set to null if there’s
  * no matching value to be found.
@@ -31,6 +31,10 @@ use function Stringy\create as s;
  *
  * * MAILER__SERVER_PORT ~> mailer.server_port
  * * SESSION__STORAGE__MAX_SIZE ~> session.storage.max_size
+ *
+ * Also, the parameter value will automatically be cast to an integer or a float
+ * if the base value’s format is recognized as such (decimal format only), and
+ * to a boolean if the base value is *true* or *false*.
  *
  * @author Fabien Schurter <fabien@fabschurt.com>
  */
@@ -90,7 +94,7 @@ final class EnvVarConfigParser implements ConfigParserInterface
                 throw new \RuntimeException($e->getMessage());
             }
             if (!isset($params[$paramName]) || $params[$paramName] === null) {
-                $params[$paramName] = $this->loader->getEnvironmentVariable($envVarName);
+                $params[$paramName] = $this->castValue($this->loader->getEnvironmentVariable($envVarName));
             }
         }
 
@@ -119,5 +123,36 @@ final class EnvVarConfigParser implements ConfigParserInterface
             ->toLowerCase()
             ->replace('__', '.')
         ;
+    }
+
+    /**
+     * Casts the passed string value to its supposed expected type.
+     *
+     * @param string $value The raw string value
+     *
+     * @return mixed The cast value
+     */
+    private function castValue($value)
+    {
+        foreach ([
+            // Integers
+            '/^-?\d+$/' => function ($value) {
+                return (int) $value;
+            },
+            // Floats
+            '/^-?\d+\.\d+$/' => function ($value) {
+                return (float) $value;
+            },
+            // Booleans
+            '/^(?:true|false)$/' => function ($value) {
+                return filter_var($value, \FILTER_VALIDATE_BOOLEAN);
+            },
+        ] as $format => $castFunction) {
+            if (preg_match($format, $value)) {
+                return $castFunction($value);
+            }
+        }
+
+        return $value;
     }
 }

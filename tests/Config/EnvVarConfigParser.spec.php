@@ -23,6 +23,10 @@ VAR_IN_DOTENV_ONLY=example_value
 VAR_WITH_NO_MATCHING_VALUE=example_value
 VAR_WITH__ONE_LEVEL_NAMESPACE=example_value
 VAR_WITH__TWO_LEVEL__NAMESPACE=example_value
+VAR_WITH_INT_VALUE=example_value
+VAR_WITH_NEGATIVE_INT_VALUE=example_value
+VAR_WITH_TRUE_VALUE=example_value
+VAR_WITH_FALSE_VALUE=example_value
 DOTENV;
             $dotenvFile = <<<'DOTENV'
 VAR_IN_ENVIRONMENT_AND_DOTENV_FILE=Doge
@@ -30,6 +34,10 @@ VAR_IN_DOTENV_ONLY=Trinity
 VAR_NOT_IN_DOTENV_EXAMPLE_FILE="This should be ignored"
 VAR_WITH__ONE_LEVEL_NAMESPACE=Doggo
 VAR_WITH__TWO_LEVEL__NAMESPACE="Moon Moon"
+VAR_WITH_INT_VALUE=9000
+VAR_WITH_NEGATIVE_INT_VALUE=-273
+VAR_WITH_TRUE_VALUE=true
+VAR_WITH_FALSE_VALUE=false
 DOTENV;
             if ($addInvalidEntry) {
                 $dotenvExampleFile .= "\nThiS_IS_NOT_Right=example_value";
@@ -61,16 +69,20 @@ DOTENV;
         it('imports the variables described in the `.env.example` file', function () {
             $params = $this->subjectFactory()->parseConfig();
             foreach ([
-                ['VAR_IN_ENVIRONMENT_AND_DOTENV_FILE', 'var_in_environment_and_dotenv_file', 'Morpheus'],
-                ['VAR_IN_DOTENV_ONLY', 'var_in_dotenv_only', 'Trinity'],
-                ['VAR_WITH_NO_MATCHING_VALUE', 'var_with_no_matching_value', null],
-                ['VAR_WITH__ONE_LEVEL_NAMESPACE', 'var_with.one_level_namespace', 'Doggo'],
-                ['VAR_WITH__TWO_LEVEL__NAMESPACE', 'var_with.two_level.namespace', 'Moon Moon'],
+                ['VAR_IN_ENVIRONMENT_AND_DOTENV_FILE', 'var_in_environment_and_dotenv_file', 'Morpheus', null],
+                ['VAR_IN_DOTENV_ONLY', 'var_in_dotenv_only', 'Trinity', null],
+                ['VAR_WITH_NO_MATCHING_VALUE', 'var_with_no_matching_value', null, null],
+                ['VAR_WITH__ONE_LEVEL_NAMESPACE', 'var_with.one_level_namespace', 'Doggo', null],
+                ['VAR_WITH__TWO_LEVEL__NAMESPACE', 'var_with.two_level.namespace', 'Moon Moon', null],
+                ['VAR_WITH_INT_VALUE', 'var_with_int_value', '9000', 9000],
+                ['VAR_WITH_NEGATIVE_INT_VALUE', 'var_with_negative_int_value', '-273', -273],
+                ['VAR_WITH_TRUE_VALUE', 'var_with_true_value', 'true', true],
+                ['VAR_WITH_FALSE_VALUE', 'var_with_false_value', 'false', false],
             ] as $example) {
-                list($envVarName, $paramName, $paramValue) = $example;
-                expect(getenv($envVarName) ?: null)->to->equal($paramValue);
+                list($envVarName, $paramName, $envValue, $paramValue) = $example;
+                expect(getenv($envVarName) ?: null)->to->equal($envValue);
                 expect($params)->to->contain->keys([$paramName]);
-                expect($params[$paramName])->to->equal($paramValue);
+                expect($params[$paramName])->to->equal(!is_null($paramValue) ? $paramValue : $envValue);
             }
         });
 
