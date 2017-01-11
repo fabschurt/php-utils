@@ -83,7 +83,7 @@ DOTENV;
             expect($this->subjectFactory()->parseConfig())->to->not->contain->keys(['var_not_in_dotenv_example_file']);
         });
 
-        it('doesn’t override existing parameters', function () {
+        it('doesn’t override pre-set parameters', function () {
             $key    = 'var_with.one_level_namespace';
             $value  = 'Goofy';
             $params = $this->subjectFactory(true, false, [$key => $value])->parseConfig();
