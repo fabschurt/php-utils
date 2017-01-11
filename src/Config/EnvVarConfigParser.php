@@ -59,11 +59,11 @@ final class EnvVarConfigParser implements ConfigParserInterface
     private $defaultValues;
 
     /**
-     * @param string $dotenvDirPath   Absolute path to the directory containing the `.env.example` file and (optionally)
-     *                                the `.env` file
-     * @param array  $presetValues    A hash of immutable pre-set parameter values which will be part of the final config
-     *                                array and whose values won’t be overwritten
-     * @param string $defaultValues   A hash of default parameter values
+     * @param string $dotenvDirPath Absolute path to the directory containing the `.env.example` file and (optionally)
+     *                              the `.env` file
+     * @param array  $presetValues  A hash of immutable pre-set parameter values which will be part of the final config
+     *                              array and whose values won’t be overwritten
+     * @param string $defaultValues A hash of default parameter values
      */
     public function __construct($dotenvDirPath, array $presetValues = [], array $defaultValues = [])
     {
