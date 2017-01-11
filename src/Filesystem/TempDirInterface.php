@@ -51,8 +51,8 @@ interface TempDirInterface
      *                                 ],
      *                             ],
      *                         ]
-     * @param string $baseDir (optional) The subdirectory path (relative to the current temporary path) which the
-     *                        expected subtree should be a child of
+     * @param string $baseDir The subdirectory path (relative to the current temporary path) which the expected subtree
+     *                        should be a child of
      */
     public function addStructure(array $structure, $baseDir = '');
 

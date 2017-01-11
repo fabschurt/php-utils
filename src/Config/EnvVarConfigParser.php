@@ -17,22 +17,26 @@ use Dotenv\Loader;
 use function Stringy\create as s;
 
 /**
- * This parser will import config parameters from environment variables.
+ * This parser will import config parameters from environment variables and/or
+ * a `.env` file.
  *
- * Variables described in the `.env.example` file will be imported as environment
- * variables and then as config parameters, with values being taken from
- * preexisting environment variables first, and then optionally from a `.env`
- * file (without overwriting existing non-null values), or set to null if there’s
- * no matching value to be found.
+ * The names of the variables to import will be taken from the examples set in
+ * a `.env.example` file, whose path must be passed to the constructor. The
+ * values for the resulting parameters will be taken from the following sources,
+ * in descending order of priority:
  *
- * It has pseudo-namespace support, as double underscores in an environment
- * variable name will be replaced with a dot in the resulting parameter name,
- * for example:
+ * * preexisting environment variables
+ * * `.env` file variables
+ * * `null` if no matching value can be found
+ *
+ * This parser has pseudo-namespace support, as double underscores in an
+ * environment variable name will be replaced with a dot in the resulting
+ * parameter name, for example:
  *
  * * MAILER__SERVER_PORT ~> mailer.server_port
  * * SESSION__STORAGE__MAX_SIZE ~> session.storage.max_size
  *
- * Also, the parameter value will automatically be cast to an integer or a float
+ * Also, the parameter value will be automatically cast to an integer or a float
  * if the base value’s format is recognized as such (decimal format only), and
  * to a boolean if the base value is *true* or *false*.
  *
@@ -61,10 +65,13 @@ final class EnvVarConfigParser implements ConfigParserInterface
     private $baseParams;
 
     /**
-     * @param Dotenv $dotenv
-     * @param Loader $loader
-     * @param string $exampleFilePath
-     * @param array  $baseParams      (optional) Default: []
+     * @param Dotenv $dotenv          A fully initialized `Dotenv` instance
+     * @param Loader $loader          A dummy `Loader` instance, whose `filePath` constructor parameter should be set to
+     *                                `null`
+     * @param string $exampleFilePath Path to the `.env.example` file which will define what environment variables will
+     *                                be imported
+     * @param array  $baseParams      A set of immutable base params, which will be part of the final config array and
+     *                                whose value won’t be overwritten
      */
     public function __construct(Dotenv $dotenv, Loader $loader, $exampleFilePath, array $baseParams = [])
     {
@@ -76,6 +83,9 @@ final class EnvVarConfigParser implements ConfigParserInterface
 
     /**
      * {@inheritDoc}
+     *
+     * If `$this->exampleFilePath` doesn’t point to an existing file, nothing will be imported and `$this->baseParams`
+     * will simply be returned.
      */
     public function parseConfig()
     {
