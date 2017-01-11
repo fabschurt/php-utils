@@ -9,8 +9,6 @@
  * file that was distributed with this source code.
  */
 
-use Dotenv\Dotenv;
-use Dotenv\Loader;
 use FabSchurt\Php\Utils\Config\EnvVarConfigParser;
 use org\bovigo\vfs\vfsStream;
 
