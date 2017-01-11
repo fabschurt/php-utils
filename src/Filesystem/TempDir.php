@@ -58,7 +58,7 @@ final class TempDir implements TempDirInterface
      */
     public function __toString()
     {
-        if (is_null($this->path)) {
+        if ($this->path === null) {
             $path = sprintf('%s/%s', sys_get_temp_dir(), uniqid($this->dirNamePrefix));
             $this->filesystem->mkdir($path);
             $this->path = $path;
@@ -107,7 +107,7 @@ final class TempDir implements TempDirInterface
      */
     public function cleanup()
     {
-        if (!is_null($this->path) && $this->path !== '/') {
+        if ($this->path !== null && $this->path !== '/') {
             $this->filesystem->remove($this->path);
             $this->path = null;
         }

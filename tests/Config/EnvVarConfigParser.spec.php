@@ -75,7 +75,7 @@ DOTENV;
                 list($envVarName, $paramName, $envValue, $paramValue) = $example;
                 expect(getenv($envVarName) ?: null)->to->equal($envValue);
                 expect($params)->to->contain->keys([$paramName]);
-                expect($params[$paramName])->to->equal(!is_null($paramValue) ? $paramValue : $envValue);
+                expect($params[$paramName])->to->equal($paramValue !== null ? $paramValue : $envValue);
             }
         });
 
