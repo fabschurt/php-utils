@@ -57,9 +57,8 @@ DOTENV;
             putenv('VAR_NOT_IN_DOTENV_EXAMPLE_FILE="This should be ignored too"');
 
             return new EnvVarConfigParser(
-                new Dotenv($this->tmpPath),
-                new Loader(null),
                 $createExampleFile ? "{$this->tmpPath}/.env.example" : "{$this->tmpPath}/null",
+                $this->tmpPath,
                 $baseParams
             );
         };

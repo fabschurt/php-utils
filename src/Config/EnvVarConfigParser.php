@@ -45,19 +45,14 @@ use function Stringy\create as s;
 final class EnvVarConfigParser implements ConfigParserInterface
 {
     /**
-     * @var Dotenv
+     * @var string
      */
-    private $dotenv;
-
-    /**
-     * @var Loader
-     */
-    private $loader;
+    private $exampleFilePath;
 
     /**
      * @var string
      */
-    private $exampleFilePath;
+    private $dotenvDirPath;
 
     /**
      * @var array
@@ -65,19 +60,16 @@ final class EnvVarConfigParser implements ConfigParserInterface
     private $baseParams;
 
     /**
-     * @param Dotenv $dotenv          A fully initialized `Dotenv` instance
-     * @param Loader $loader          A dummy `Loader` instance, whose `filePath` constructor parameter should be set to
-     *                                `null`
-     * @param string $exampleFilePath Path to the `.env.example` file which will define what environment variables will
-     *                                be imported
+     * @param string $exampleFilePath Absolute path to the `.env.example` file which will define what environment
+     *                                variables will be imported
+     * @param string $dotenvDirPath   Absolute path to a directory containing a `.env` file
      * @param array  $baseParams      A set of immutable base params, which will be part of the final config array and
      *                                whose value won’t be overwritten
      */
-    public function __construct(Dotenv $dotenv, Loader $loader, $exampleFilePath, array $baseParams = [])
+    public function __construct($exampleFilePath, $dotenvDirPath = null, array $baseParams = [])
     {
-        $this->dotenv          = $dotenv;
-        $this->loader          = $loader;
         $this->exampleFilePath = $exampleFilePath;
+        $this->dotenvDirPath   = $dotenvDirPath;
         $this->baseParams      = $baseParams;
     }
 
@@ -94,9 +86,10 @@ final class EnvVarConfigParser implements ConfigParserInterface
             return $params;
         }
         try {
-            $this->dotenv->load();
+            (new Dotenv($this->dotenvDirPath))->load();
         } catch (InvalidPathException $e) {
         }
+        $loader = new Loader(null);
         foreach (array_keys(parse_ini_file($this->exampleFilePath)) as $envVarName) {
             try {
                 $paramName = $this->convertEnvVarNameToParamName($envVarName);
@@ -104,7 +97,7 @@ final class EnvVarConfigParser implements ConfigParserInterface
                 throw new \RuntimeException($e->getMessage());
             }
             if (!isset($params[$paramName]) || $params[$paramName] === null) {
-                $params[$paramName] = $this->castValue($this->loader->getEnvironmentVariable($envVarName));
+                $params[$paramName] = $this->castValue($loader->getEnvironmentVariable($envVarName));
             }
         }
 
