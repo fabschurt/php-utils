@@ -21,9 +21,8 @@ use function Stringy\create as s;
  * a `.env` file.
  *
  * The names of the variables to import will be taken from the examples set in
- * a `.env.example` file, whose path must be passed to the constructor. The
- * values for the resulting parameters will be taken from the following sources,
- * in descending order of priority:
+ * a given `.env.example` file, and the values for the resulting parameters will
+ * be taken from the following sources, in descending order of priority:
  *
  * * preexisting environment variables
  * * `.env` file variables
@@ -47,11 +46,6 @@ final class EnvVarConfigParser implements ConfigParserInterface
     /**
      * @var string
      */
-    private $exampleFilePath;
-
-    /**
-     * @var string
-     */
     private $dotenvDirPath;
 
     /**
@@ -60,29 +54,27 @@ final class EnvVarConfigParser implements ConfigParserInterface
     private $baseParams;
 
     /**
-     * @param string $exampleFilePath Absolute path to the `.env.example` file which will define what environment
-     *                                variables will be imported
-     * @param string $dotenvDirPath   Absolute path to a directory containing a `.env` file
+     * @param string $dotenvDirPath   Absolute path to the directory containing the `.env.example` file and (optionally)
+     *                                the `.env` file
      * @param array  $baseParams      A set of immutable base params, which will be part of the final config array and
      *                                whose value won’t be overwritten
      */
-    public function __construct($exampleFilePath, $dotenvDirPath = null, array $baseParams = [])
+    public function __construct($dotenvDirPath, array $baseParams = [])
     {
-        $this->exampleFilePath = $exampleFilePath;
-        $this->dotenvDirPath   = $dotenvDirPath;
-        $this->baseParams      = $baseParams;
+        $this->dotenvDirPath = $dotenvDirPath;
+        $this->baseParams    = $baseParams;
     }
 
     /**
      * {@inheritDoc}
      *
-     * If `$this->exampleFilePath` doesn’t point to an existing file, nothing will be imported and `$this->baseParams`
-     * will simply be returned.
+     * If no `.env.example` file can be found, parsing will stop and `$this->baseParams` will simply be returned.
      */
     public function parseConfig()
     {
         $params = $this->baseParams;
-        if (!is_file($this->exampleFilePath)) {
+        $exampleFilePath = "{$this->dotenvDirPath}/.env.example";
+        if (!is_file($exampleFilePath)) {
             return $params;
         }
         try {
@@ -90,7 +82,7 @@ final class EnvVarConfigParser implements ConfigParserInterface
         } catch (InvalidPathException $e) {
         }
         $loader = new Loader(null);
-        foreach (array_keys(parse_ini_file($this->exampleFilePath)) as $envVarName) {
+        foreach (array_keys(parse_ini_file($exampleFilePath)) as $envVarName) {
             try {
                 $paramName = $this->convertEnvVarNameToParamName($envVarName);
             } catch (\InvalidArgumentException $e) {

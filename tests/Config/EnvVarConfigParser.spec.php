@@ -54,11 +54,7 @@ DOTENV;
             putenv('VAR_IN_ENVIRONMENT_AND_DOTENV_FILE=Morpheus');
             putenv('VAR_NOT_IN_DOTENV_EXAMPLE_FILE="This should be ignored too"');
 
-            return new EnvVarConfigParser(
-                $createExampleFile ? "{$this->tmpPath}/.env.example" : "{$this->tmpPath}/null",
-                $this->tmpPath,
-                $baseParams
-            );
+            return new EnvVarConfigParser($this->tmpPath, $baseParams);
         };
     });
 
