@@ -51,28 +51,35 @@ final class EnvVarConfigParser implements ConfigParserInterface
     /**
      * @var array
      */
-    private $baseParams;
+    private $presetValues;
+
+    /**
+     * @var array
+     */
+    private $defaultValues;
 
     /**
      * @param string $dotenvDirPath   Absolute path to the directory containing the `.env.example` file and (optionally)
      *                                the `.env` file
-     * @param array  $baseParams      A set of immutable base params, which will be part of the final config array and
-     *                                whose value won’t be overwritten
+     * @param array  $presetValues    A hash of immutable pre-set parameter values which will be part of the final config
+     *                                array and whose values won’t be overwritten
+     * @param string $defaultValues   A hash of default parameter values
      */
-    public function __construct($dotenvDirPath, array $baseParams = [])
+    public function __construct($dotenvDirPath, array $presetValues = [], array $defaultValues = [])
     {
         $this->dotenvDirPath = $dotenvDirPath;
-        $this->baseParams    = $baseParams;
+        $this->presetValues  = $presetValues;
+        $this->defaultValues = $defaultValues;
     }
 
     /**
      * {@inheritDoc}
      *
-     * If no `.env.example` file can be found, parsing will stop and `$this->baseParams` will simply be returned.
+     * If no `.env.example` file can be found, parsing will stop and `$this->presetValues` will simply be returned.
      */
     public function parseConfig()
     {
-        $params = $this->baseParams;
+        $params = $this->presetValues;
         $exampleFilePath = "{$this->dotenvDirPath}/.env.example";
         if (!is_file($exampleFilePath)) {
             return $params;
@@ -88,9 +95,14 @@ final class EnvVarConfigParser implements ConfigParserInterface
             } catch (\InvalidArgumentException $e) {
                 throw new \RuntimeException($e->getMessage());
             }
-            if (!isset($params[$paramName]) || $params[$paramName] === null) {
-                $params[$paramName] = $this->castValue($loader->getEnvironmentVariable($envVarName));
+            if (isset($params[$paramName]) && $params[$paramName] !== null) {
+                continue;
             }
+            $value = $this->castValue($loader->getEnvironmentVariable($envVarName));
+            if ($value === null && isset($this->defaultValues[$paramName])) {
+                $value = $this->defaultValues[$paramName];
+            }
+            $params[$paramName] = $value;
         }
 
         return $params;

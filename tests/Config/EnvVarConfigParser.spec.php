@@ -19,6 +19,7 @@ describe(EnvVarConfigParser::class, function () {
 VAR_IN_ENVIRONMENT_AND_DOTENV_FILE=example_value
 VAR_IN_DOTENV_ONLY=example_value
 VAR_WITH_NO_MATCHING_VALUE=example_value
+VAR_WITH_MATCHING_DEFAULT_VALUE=example_value
 VAR_WITH__ONE_LEVEL_NAMESPACE=example_value
 VAR_WITH__TWO_LEVEL__NAMESPACE=example_value
 VAR_WITH_INT_VALUE=example_value
@@ -54,7 +55,7 @@ DOTENV;
             putenv('VAR_IN_ENVIRONMENT_AND_DOTENV_FILE=Morpheus');
             putenv('VAR_NOT_IN_DOTENV_EXAMPLE_FILE="This should be ignored too"');
 
-            return new EnvVarConfigParser($this->tmpPath, $presetValues);
+            return new EnvVarConfigParser($this->tmpPath, $presetValues, ['var_with_matching_default_value' => 42]);
         };
     });
 
@@ -65,6 +66,7 @@ DOTENV;
                 ['VAR_IN_ENVIRONMENT_AND_DOTENV_FILE', 'var_in_environment_and_dotenv_file', 'Morpheus'],
                 ['VAR_IN_DOTENV_ONLY', 'var_in_dotenv_only', 'Trinity'],
                 ['VAR_WITH_NO_MATCHING_VALUE', 'var_with_no_matching_value', null],
+                ['VAR_WITH_MATCHING_DEFAULT_VALUE', 'var_with_matching_default_value', 42],
                 ['VAR_WITH__ONE_LEVEL_NAMESPACE', 'var_with.one_level_namespace', 'Doggo'],
                 ['VAR_WITH__TWO_LEVEL__NAMESPACE', 'var_with.two_level.namespace', 'Moon Moon'],
                 ['VAR_WITH_INT_VALUE', 'var_with_int_value', 9000],
