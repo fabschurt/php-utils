@@ -14,7 +14,7 @@ use org\bovigo\vfs\vfsStream;
 
 describe(EnvVarConfigParser::class, function () {
     beforeEach(function () {
-        $this->subjectFactory = function ($createExampleFile = true, $addInvalidEntry = false, $baseParams = []) {
+        $this->subjectFactory = function ($createExampleFile = true, $addInvalidEntry = false, $presetValues = []) {
             $dotenvExampleFile = <<<'DOTENV'
 VAR_IN_ENVIRONMENT_AND_DOTENV_FILE=example_value
 VAR_IN_DOTENV_ONLY=example_value
@@ -54,7 +54,7 @@ DOTENV;
             putenv('VAR_IN_ENVIRONMENT_AND_DOTENV_FILE=Morpheus');
             putenv('VAR_NOT_IN_DOTENV_EXAMPLE_FILE="This should be ignored too"');
 
-            return new EnvVarConfigParser($this->tmpPath, $baseParams);
+            return new EnvVarConfigParser($this->tmpPath, $presetValues);
         };
     });
 
@@ -62,20 +62,19 @@ DOTENV;
         it('imports the variables described in the `.env.example` file', function () {
             $params = $this->subjectFactory()->parseConfig();
             foreach ([
-                ['VAR_IN_ENVIRONMENT_AND_DOTENV_FILE', 'var_in_environment_and_dotenv_file', 'Morpheus', null],
-                ['VAR_IN_DOTENV_ONLY', 'var_in_dotenv_only', 'Trinity', null],
-                ['VAR_WITH_NO_MATCHING_VALUE', 'var_with_no_matching_value', null, null],
-                ['VAR_WITH__ONE_LEVEL_NAMESPACE', 'var_with.one_level_namespace', 'Doggo', null],
-                ['VAR_WITH__TWO_LEVEL__NAMESPACE', 'var_with.two_level.namespace', 'Moon Moon', null],
-                ['VAR_WITH_INT_VALUE', 'var_with_int_value', '9000', 9000],
-                ['VAR_WITH_NEGATIVE_INT_VALUE', 'var_with_negative_int_value', '-273', -273],
-                ['VAR_WITH_TRUE_VALUE', 'var_with_true_value', 'true', true],
-                ['VAR_WITH_FALSE_VALUE', 'var_with_false_value', 'false', false],
+                ['VAR_IN_ENVIRONMENT_AND_DOTENV_FILE', 'var_in_environment_and_dotenv_file', 'Morpheus'],
+                ['VAR_IN_DOTENV_ONLY', 'var_in_dotenv_only', 'Trinity'],
+                ['VAR_WITH_NO_MATCHING_VALUE', 'var_with_no_matching_value', null],
+                ['VAR_WITH__ONE_LEVEL_NAMESPACE', 'var_with.one_level_namespace', 'Doggo'],
+                ['VAR_WITH__TWO_LEVEL__NAMESPACE', 'var_with.two_level.namespace', 'Moon Moon'],
+                ['VAR_WITH_INT_VALUE', 'var_with_int_value', 9000],
+                ['VAR_WITH_NEGATIVE_INT_VALUE', 'var_with_negative_int_value', -273],
+                ['VAR_WITH_TRUE_VALUE', 'var_with_true_value', true],
+                ['VAR_WITH_FALSE_VALUE', 'var_with_false_value', false],
             ] as $example) {
-                list($envVarName, $paramName, $envValue, $paramValue) = $example;
-                expect(getenv($envVarName) ?: null)->to->equal($envValue);
+                list($envVarName, $paramName, $paramValue) = $example;
                 expect($params)->to->contain->keys([$paramName]);
-                expect($params[$paramName])->to->equal($paramValue !== null ? $paramValue : $envValue);
+                expect($params[$paramName])->to->equal($paramValue);
             }
         });
 
