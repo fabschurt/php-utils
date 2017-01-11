@@ -80,15 +80,15 @@ DOTENV;
             }
         });
 
-        it('doesn’t import variables if they are not described in the `.env.example` file', function () {
-            expect($this->subjectFactory()->parseConfig())->to->not->contain->keys(['var_not_in_dotenv_example_file']);
-        });
-
         it('doesn’t override pre-set parameters', function () {
             $key    = 'var_with.one_level_namespace';
             $value  = 'Goofy';
             $params = $this->subjectFactory(true, false, [$key => $value])->parseConfig();
             expect($params[$key])->to->equal($value);
+        });
+
+        it('doesn’t import variables if they are not described in the `.env.example` file', function () {
+            expect($this->subjectFactory()->parseConfig())->to->not->contain->keys(['var_not_in_dotenv_example_file']);
         });
 
         it('doesn’t import variables if there’s no `.env.example` file', function () {
