@@ -39,6 +39,10 @@ use function Stringy\create as s;
  * if the base value’s format is recognized as such (decimal format only), and
  * to a boolean if the base value is *true* or *false*.
  *
+ * *Note:* your `.env.example` file will be parsed by PHP, so even if its values
+ * won’t be used (only its keys), they still have to be valid INI syntax, otherwise
+ * a parse error will occur.
+ *
  * @author Fabien Schurter <fabien@fabschurt.com>
  */
 final class EnvVarConfigParser implements ConfigParserInterface
